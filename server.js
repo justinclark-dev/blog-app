@@ -9,6 +9,7 @@ const app = express();
 const mongoose = require('mongoose');
 const methodOverride = require("method-override");
 const morgan = require("morgan");
+const path = require("path");
 
 // This middleware parses incoming request bodies, 
 // extracting form data and converting it into a 
@@ -19,6 +20,7 @@ const morgan = require("morgan");
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
+app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(process.env.MONGODB_URI)
 
@@ -30,24 +32,34 @@ const Blog = require('./models/blog.js');
 
 // GET /
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render('index.ejs', { 
+        page: { title: 'Welcome to my blog!' }
+    });
 });
 
 // GET /blog
 app.get("/blog", async (req, res) => {
     const allBlogs = await Blog.find();
-    res.render("blog/index.ejs", { blogs: allBlogs });
+    res.render("blog/index.ejs", { 
+        page: { title: 'All Blog Posts' },
+        blogs: allBlogs 
+    });
 });
 
 // GET /blog/new
 app.get("/blog/new", (req, res) => {
-    res.render("blog/new.ejs");
+    res.render("blog/new.ejs", { 
+        page: { title: 'Create a Blog Post' }
+    });
 });
 
 // GET /blog/:id
 app.get("/blog/:id", async (req, res) => {
     const foundBlog = await Blog.findById(req.params.id);
-    res.render("blog/show.ejs", { blog: foundBlog });
+    res.render("blog/show.ejs", { 
+        page: { title: foundBlog.name },
+        blog: foundBlog
+    });
 });
 
 // POST /blog
@@ -87,6 +99,7 @@ app.delete("/blog/:id", async (req, res) => {
 app.get("/blog/:id/edit", async (req, res) => {
     const foundBlog = await Blog.findById(req.params.id);
     res.render("blog/edit.ejs", {
+        page: { title: foundBlog.name },
         blog: foundBlog,
     });
 });

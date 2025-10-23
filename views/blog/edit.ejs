@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
     
-    <h1>Edit <%= blog.name %></h1>
+    <h1><%= page.title %></h1>
 
     <form action="/blog/<%=blog._id%>?_method=PUT" method="POST">
         <label for="name">Name:</label>
@@ -25,9 +19,14 @@
         <label for="content">Content:</label>
         <textarea id="content" name="content" rows="4" cols="50"><%= blog.content %></textarea>
 
-        <button type="submit">Update Blog Post</button>
-    </form>
-    <a href="/blog">Back to all blogs</a>
+        <div class="blog-control-buttons">
+            <button type="submit">Update Blog Post</button>
 
-</body>
-</html>
+            <a href="/blog">
+                <button>Back to all blogs</button>
+            </a>
+        </div>
+    </form>
+    
+
+<%- include('../partials/footer') %>
