@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= blog.name %></title>
+</head>
+<body>
+    
+    <h1><%= blog.name %></h1>
+
+    <sub><%= blog.datePublished %></sub>
+    <sub><%= blog.category %></sub>
+    
+    <p><%= blog.content %></p>
+
+    <form class="delete-form" action="/blog/<%=blog._id%>?_method=DELETE" method="POST">
+        <button type="submit">
+            Delete <%= blog.name %>
+        </button>
+    </form>
+    <a class="edit-link" href="/blog/<%= blog._id %>/edit">
+        Edit <%= blog.name %>
+    </a>
+
+</body>
+</html>

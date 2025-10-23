@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Blog Post</title>
+</head>
+<body>
+    
+    <h1>Create a Blog Post</h1>
+
+    <a href="/blog/">View all blog posts</a>
+
+    <form action="/blog" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" />
+        
+        <label for="isActive">Active:</label>
+        <input type="checkbox" name="isActive" id="is-active" />
+        
+        <label for="datePublished">Date Published:</label>
+        <input type="date" name="datePublished" id="date-published" />
+        
+        <label for="category">Category:</label>
+        <input type="text" name="category" id="category" />
+        
+        <label for="content">Content:</label>
+        <input type="text" name="content" id="content" />
+
+        <button type="submit">Add Blog Post</button>
+    </form>
+
+</body>
+</html>
