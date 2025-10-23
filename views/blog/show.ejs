@@ -14,14 +14,15 @@
     
     <p><%= blog.content %></p>
 
-    <form class="delete-form" action="/blog/<%=blog._id%>?_method=DELETE" method="POST">
-        <button type="submit">
-            Delete <%= blog.name %>
-        </button>
-    </form>
-    <a class="edit-link" href="/blog/<%= blog._id %>/edit">
-        Edit <%= blog.name %>
-    </a>
+    <div class="blog-control-buttons">
+        <form action="/blog/<%=blog._id%>?_method=DELETE" method="POST">
+            <button type="submit">
+                Delete
+            </button>
+        </form>
+    
 
+        <a href="/blog/<%= blog._id %>/edit"><button>Edit</button></a>
+    </div>
 </body>
 </html>

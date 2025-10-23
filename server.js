@@ -30,7 +30,7 @@ const Blog = require('./models/blog.js');
 
 // GET /
 app.get('/', (req, res) => {
-    res.send('Yo, it works!');
+    res.render('index.ejs');
 });
 
 // GET /blog
@@ -44,9 +44,9 @@ app.get("/blog/new", (req, res) => {
     res.render("blog/new.ejs");
 });
 
-// GET /blog/:blogId
-app.get("/blog/:blogId", async (req, res) => {
-    const foundBlog = await Blog.findById(req.params.blogId);
+// GET /blog/:id
+app.get("/blog/:id", async (req, res) => {
+    const foundBlog = await Blog.findById(req.params.id);
     res.render("blog/show.ejs", { blog: foundBlog });
 });
 
@@ -59,6 +59,36 @@ app.post("/blog", async (req, res) => {
     }
     await Blog.create(req.body);
     res.redirect("/blog");
+});
+
+// PUT /blog/:id
+app.put("/blog/:id", async (req, res) => {
+    // Handle the 'isActive' checkbox data
+    if (req.body.isActive === "on") {
+        req.body.isActive = true;
+    } else {
+        req.body.isActive = false;
+    }
+
+    // Update the blog in the database
+    await Blog.findByIdAndUpdate(req.params.id, req.body);
+
+    // Redirect to the blog's show page to see the updates
+    res.redirect(`/blog/${req.params.id}`);
+});
+
+// DELETE /blog/:id
+app.delete("/blog/:id", async (req, res) => {
+    await Blog.findByIdAndDelete(req.params.id);
+    res.redirect("/blog");
+});
+
+// GET /blog/:id/edit
+app.get("/blog/:id/edit", async (req, res) => {
+    const foundBlog = await Blog.findById(req.params.id);
+    res.render("blog/edit.ejs", {
+        blog: foundBlog,
+    });
 });
 
 app.listen(3000, () => {
