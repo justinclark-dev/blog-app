@@ -7,9 +7,17 @@ const express = require('express');
 const app = express();
 
 const mongoose = require('mongoose');
+
 const methodOverride = require("method-override");
 const morgan = require("morgan");
 const path = require("path");
+const bodyParser = require('body-parser');
+
+
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+
 
 // This middleware parses incoming request bodies, 
 // extracting form data and converting it into a 
@@ -18,9 +26,11 @@ const path = require("path");
 // the form data easily accessible within our route 
 // handlers.
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+
 
 mongoose.connect(process.env.MONGODB_URI)
 
@@ -81,6 +91,11 @@ app.put("/blog/:id", async (req, res) => {
     } else {
         req.body.isActive = false;
     }
+    console.log('start content')
+    console.log(req.body.content)
+    console.log('end content')
+  
+
 
     // Update the blog in the database
     await Blog.findByIdAndUpdate(req.params.id, req.body);
@@ -98,8 +113,10 @@ app.delete("/blog/:id", async (req, res) => {
 // GET /blog/:id/edit
 app.get("/blog/:id/edit", async (req, res) => {
     const foundBlog = await Blog.findById(req.params.id);
+
+    
     res.render("blog/edit.ejs", {
-        page: { title: foundBlog.name },
+        page: { title: 'Edit Blog Post' },
         blog: foundBlog,
     });
 });
