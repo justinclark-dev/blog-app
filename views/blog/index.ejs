@@ -5,23 +5,24 @@
 
     <a href="/blog/new">Add Blog Post</a>
 
-    <ul>
-        <% blogs.forEach((blog)=> { %>
-            <li>
+    <% blogs.forEach((blog)=> { %>
+        <div>
 
-                <h2><%= blog.name %></h2>
+            <!-- TODO: replace <br> with css -->
+            <!-- TODO: do we have all the right columns to display? -->
+            <br>
+            <h2><%= blog.name %></h2>
+            <p><%= blog.author %></p>
+            <p><%= blog.datePublished %></p>
+            <p><%= blog.description %></p>
+            
+            <a href="/blog/<%=blog.nameURL%>">
+                <%= blog.name %>
+            </a>
+            <br><br>
+            <hr>
 
-                <sub><%= blog.datePublished %></sub>
-                <sub><%= blog.category %></sub>
-                
-                <p><%= blog.content %></p>
-
-                <a href="/blog/<%=blog._id%>">
-                    <%= blog.name %>
-                </a>
-
-            </li>
-            <% }) %>
-    </ul>
-
+        </div>
+    <% }) %>
+    
 <%- include('../partials/footer') %>

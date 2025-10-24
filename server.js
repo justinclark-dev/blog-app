@@ -63,12 +63,13 @@ app.get("/blog/new", (req, res) => {
     });
 });
 
-// GET /blog/:id
-app.get("/blog/:id", async (req, res) => {
-    const foundBlog = await Blog.findById(req.params.id);
+// GET /blog/:nameURL
+app.get("/blog/:nameURL", async (req, res) => {
+    const foundBlog = await Blog.find({ nameURL: req.params.nameURL });
+    console.log(foundBlog)
     res.render("blog/show.ejs", { 
-        page: { title: foundBlog.name },
-        blog: foundBlog
+        page: { title: foundBlog[0].name },
+        blog: foundBlog[0]
     });
 });
 
@@ -79,7 +80,13 @@ app.post("/blog", async (req, res) => {
     } else {
         req.body.isActive = false;
     }
+
+    // ***********************************************************
+    // DANGER!
+    // TODO: figure out how to sanitize html before saving to DB!
     await Blog.create(req.body);
+    // ***********************************************************
+
     res.redirect("/blog");
 });
 
@@ -91,17 +98,22 @@ app.put("/blog/:id", async (req, res) => {
     } else {
         req.body.isActive = false;
     }
-    console.log('start content')
-    console.log(req.body.content)
-    console.log('end content')
+    console.log('start content-----------------')
+    // console.log(req.body.content)
+    console.log(req.body.nameURL)
+    console.log('end content--------------------')
   
-
-
+    
+    
     // Update the blog in the database
+    // ***********************************************************
+    // DANGER!
+    // TODO: figure out how to sanitize html before saving to DB!
     await Blog.findByIdAndUpdate(req.params.id, req.body);
+    // ***********************************************************
 
     // Redirect to the blog's show page to see the updates
-    res.redirect(`/blog/${req.params.id}`);
+    res.redirect(`/blog/${req.body.nameURL}`);
 });
 
 // DELETE /blog/:id
@@ -113,8 +125,7 @@ app.delete("/blog/:id", async (req, res) => {
 // GET /blog/:id/edit
 app.get("/blog/:id/edit", async (req, res) => {
     const foundBlog = await Blog.findById(req.params.id);
-
-    
+   
     res.render("blog/edit.ejs", {
         page: { title: 'Edit Blog Post' },
         blog: foundBlog,
@@ -124,3 +135,25 @@ app.get("/blog/:id/edit", async (req, res) => {
 app.listen(3000, () => {
     console.log('Listening on port 3000');
 });
+
+/*
+
+    Major TODO's: 
+    
+        sanitize html before saving to DB ! (can't serve to prod without it!)
+        make nameURL field a unique field so no duplicates
+        not found - 404
+            should be easy to make middleware, probably already some out there
+        discouple routes and controller logic and remove from server.js
+            create routes module
+            create controller module
+        make layout for mobile & medium screens
+        clean css
+        review fields (do we need more, are the right ones visible/editable)
+        what other tables, pages, functionality could be added
+            review more blog examples
+        login/auth work
+        check other level-ups
+
+
+*/

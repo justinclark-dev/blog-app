@@ -17,9 +17,16 @@
 
     <form id="edit-form" class="blog-post" action="/blog/<%=blog._id%>?_method=PUT" method="POST">
         
+        <!-- TODO: do we have all the right columns to edit? -->
+
         <div class="column">
             <label for="name">Name:</label>
-            <input type="text" name="name" id="name" value="<%= blog.name %>"/>
+            <input type="text" name="name" id="name" value="<%= blog.name %>" />
+        </div>
+        
+        <div class="column">
+            <label for="name">Name:</label>
+            <input type="text" name="nameURL" id="name-url" value="<%= blog.nameURL %>" />
         </div>
 
         <div class="column checkbox-div">
@@ -27,9 +34,10 @@
             <input type="checkbox" name="isActive" id="is-active" <% if (blog.isActive) { %>checked<% } %>/>
         </div>
 
+        <!-- TODO: date not loading -->
         <div class="column">
             <label for="datePublished">Date Published:</label>
-            <input type="date" name="datePublished" id="date-published" value="<%= blog.datePublished %>"/>
+            <input type="date" name="datePublished" id="date-published" value="<%= blog.datePublished %>" />
         </div>
 
         <div class="column">
@@ -39,10 +47,11 @@
 
         <div class="column">
             <div id="editor"><%- blog.content %></div>
-            <input type="hidden" name="content" id="editorContent">
+            <input type="hidden" name="content" id="editorContent" />
         </div>
 
         <div class="row blog-control-buttons">
+
             <button type="submit">Update</button>
 
             <a href="/blog">
@@ -53,7 +62,8 @@
 
     <script>
 
-        var quill = new Quill('#editor', {
+        //TODO: create helper module to avoid duplication of this function
+        let quill = new Quill('#editor', {
             theme: 'snow',   // Specify theme (snow or bubble)
             modules: {
             toolbar: [
@@ -67,6 +77,26 @@
             const content = quill.root.innerHTML;
             document.getElementById('editorContent').value = content;
         };
+
+                const blogName = document.getElementById('name');
+        const nameURL = document.getElementById('name-url');
+
+        //TODO: create helper module to avoid duplication of this function
+        const createURL = (name) => {
+
+            //TODO: handle only words (i.e. a word must constist of a-z characters)
+            let newName = '';
+            name.split(" ").forEach(word => {
+                newName += word + '-';
+            });
+
+            return newName.slice(0, -1);
+        };
+
+        blogName.addEventListener('blur', async (event) => {
+            const setNameURL = await createURL(blogName.value);
+            nameURL.value = setNameURL;
+        });
 
     </script>
     
